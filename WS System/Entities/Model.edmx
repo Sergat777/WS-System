@@ -1,0 +1,508 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Competition">
+          <Key>
+            <PropertyRef Name="idCompetition" />
+          </Key>
+          <Property Name="idCompetition" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="titleCompetition" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="startDateCompetition" Type="date" Nullable="false" />
+          <Property Name="endDateCompetition" Type="date" Nullable="false" />
+          <Property Name="cityCompetition" Type="nvarchar" MaxLength="70" Nullable="false" />
+          <Property Name="regionCode" Type="int" Nullable="false" />
+          <Property Name="skillId" Type="int" />
+          <Property Name="descriptionCompetition" Type="nvarchar(max)" />
+          <Property Name="photoPathCompetition" Type="nvarchar(max)" />
+          <Property Name="logoPathCompetition" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="codeRegion" />
+          </Key>
+          <Property Name="codeRegion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameRegion" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="idRole" />
+          </Key>
+          <Property Name="idRole" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameRole" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Skill">
+          <Key>
+            <PropertyRef Name="idSkill" />
+          </Key>
+          <Property Name="idSkill" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameSkill" Type="nvarchar" MaxLength="70" Nullable="false" />
+          <Property Name="isFutureSkill" Type="bit" Nullable="false" />
+          <Property Name="skillBlockId" Type="int" Nullable="false" />
+          <Property Name="NumberCompetitorSkill" Type="int" Nullable="false" />
+          <Property Name="NumberExpertSkill" Type="int" Nullable="false" />
+          <Property Name="WorkPlaceArea" Type="float" Nullable="false" />
+          <Property Name="StoreArea" Type="float" Nullable="false" />
+          <Property Name="MarkRoomArea" Type="float" Nullable="false" />
+          <Property Name="BriffingRoomArea" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SkillBlock">
+          <Key>
+            <PropertyRef Name="idSkillBlock" />
+          </Key>
+          <Property Name="idSkillBlock" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameSkillBlock" Type="nvarchar" MaxLength="70" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="idUser" />
+          </Key>
+          <Property Name="idUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstNameUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastNameUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="PatronymicUser" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PINUser" Type="nchar" MaxLength="5" />
+          <Property Name="PasswordUser" Type="nvarchar" MaxLength="20" />
+          <Property Name="roleId" Type="int" />
+          <Property Name="phoneNumberUser" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="emailUser" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="skillId" Type="int" />
+          <Property Name="regionCode" Type="int" Nullable="false" />
+          <Property Name="competitionUser" Type="int" />
+          <Property Name="placeUser" Type="int" />
+        </EntityType>
+        <Association Name="FK_Competition_Region">
+          <End Role="Region" Type="Self.Region" Multiplicity="1" />
+          <End Role="Competition" Type="Self.Competition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="codeRegion" />
+            </Principal>
+            <Dependent Role="Competition">
+              <PropertyRef Name="regionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Competition_Skill">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+          <End Role="Competition" Type="Self.Competition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="idSkill" />
+            </Principal>
+            <Dependent Role="Competition">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Skill_SkillBlock">
+          <End Role="SkillBlock" Type="Self.SkillBlock" Multiplicity="1" />
+          <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SkillBlock">
+              <PropertyRef Name="idSkillBlock" />
+            </Principal>
+            <Dependent Role="Skill">
+              <PropertyRef Name="skillBlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Region">
+          <End Role="Region" Type="Self.Region" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="codeRegion" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="regionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="idRole" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Skill">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="idSkill" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Competition" EntityType="Self.Competition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SkillBlock" EntityType="Self.SkillBlock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Competition_Region" Association="Self.FK_Competition_Region">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="Competition" EntitySet="Competition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Competition_Skill" Association="Self.FK_Competition_Skill">
+            <End Role="Skill" EntitySet="Skill" />
+            <End Role="Competition" EntitySet="Competition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Skill_SkillBlock" Association="Self.FK_Skill_SkillBlock">
+            <End Role="SkillBlock" EntitySet="SkillBlock" />
+            <End Role="Skill" EntitySet="Skill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Region" Association="Self.FK_User_Region">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Skill" Association="Self.FK_User_Skill">
+            <End Role="Skill" EntitySet="Skill" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Competition">
+          <Key>
+            <PropertyRef Name="idCompetition" />
+          </Key>
+          <Property Name="idCompetition" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="titleCompetition" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="startDateCompetition" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="endDateCompetition" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="cityCompetition" Type="String" MaxLength="70" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="regionCode" Type="Int32" Nullable="false" />
+          <Property Name="skillId" Type="Int32" />
+          <Property Name="descriptionCompetition" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="photoPathCompetition" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="logoPathCompetition" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Region" Relationship="Self.FK_Competition_Region" FromRole="Competition" ToRole="Region" />
+          <NavigationProperty Name="Skill" Relationship="Self.FK_Competition_Skill" FromRole="Competition" ToRole="Skill" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="codeRegion" />
+          </Key>
+          <Property Name="codeRegion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameRegion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Competition" Relationship="Self.FK_Competition_Region" FromRole="Region" ToRole="Competition" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Region" FromRole="Region" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="idRole" />
+          </Key>
+          <Property Name="idRole" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameRole" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Skill">
+          <Key>
+            <PropertyRef Name="idSkill" />
+          </Key>
+          <Property Name="idSkill" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameSkill" Type="String" MaxLength="70" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isFutureSkill" Type="Boolean" Nullable="false" />
+          <Property Name="skillBlockId" Type="Int32" Nullable="false" />
+          <Property Name="NumberCompetitorSkill" Type="Int32" Nullable="false" />
+          <Property Name="NumberExpertSkill" Type="Int32" Nullable="false" />
+          <Property Name="WorkPlaceArea" Type="Double" Nullable="false" />
+          <Property Name="StoreArea" Type="Double" Nullable="false" />
+          <Property Name="MarkRoomArea" Type="Double" Nullable="false" />
+          <Property Name="BriffingRoomArea" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Competition" Relationship="Self.FK_Competition_Skill" FromRole="Skill" ToRole="Competition" />
+          <NavigationProperty Name="SkillBlock" Relationship="Self.FK_Skill_SkillBlock" FromRole="Skill" ToRole="SkillBlock" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Skill" FromRole="Skill" ToRole="User" />
+        </EntityType>
+        <EntityType Name="SkillBlock">
+          <Key>
+            <PropertyRef Name="idSkillBlock" />
+          </Key>
+          <Property Name="idSkillBlock" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameSkillBlock" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Skill" Relationship="Self.FK_Skill_SkillBlock" FromRole="SkillBlock" ToRole="Skill" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="idUser" />
+          </Key>
+          <Property Name="idUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstNameUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastNameUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PatronymicUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PINUser" Type="String" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Name="PasswordUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="roleId" Type="Int32" />
+          <Property Name="phoneNumberUser" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="emailUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="skillId" Type="Int32" />
+          <Property Name="regionCode" Type="Int32" Nullable="false" />
+          <Property Name="competitionUser" Type="Int32" />
+          <Property Name="placeUser" Type="Int32" />
+          <NavigationProperty Name="Region" Relationship="Self.FK_User_Region" FromRole="User" ToRole="Region" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="Skill" Relationship="Self.FK_User_Skill" FromRole="User" ToRole="Skill" />
+        </EntityType>
+        <Association Name="FK_Competition_Region">
+          <End Role="Region" Type="Self.Region" Multiplicity="1" />
+          <End Role="Competition" Type="Self.Competition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="codeRegion" />
+            </Principal>
+            <Dependent Role="Competition">
+              <PropertyRef Name="regionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Competition_Skill">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+          <End Role="Competition" Type="Self.Competition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="idSkill" />
+            </Principal>
+            <Dependent Role="Competition">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Region">
+          <End Role="Region" Type="Self.Region" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="codeRegion" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="regionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="idRole" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Skill_SkillBlock">
+          <End Role="SkillBlock" Type="Self.SkillBlock" Multiplicity="1" />
+          <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SkillBlock">
+              <PropertyRef Name="idSkillBlock" />
+            </Principal>
+            <Dependent Role="Skill">
+              <PropertyRef Name="skillBlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Skill">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="idSkill" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WS_SystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Competition" EntityType="Self.Competition" />
+          <EntitySet Name="Region" EntityType="Self.Region" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="Skill" EntityType="Self.Skill" />
+          <EntitySet Name="SkillBlock" EntityType="Self.SkillBlock" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Competition_Region" Association="Self.FK_Competition_Region">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="Competition" EntitySet="Competition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Competition_Skill" Association="Self.FK_Competition_Skill">
+            <End Role="Skill" EntitySet="Skill" />
+            <End Role="Competition" EntitySet="Competition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Region" Association="Self.FK_User_Region">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Skill_SkillBlock" Association="Self.FK_Skill_SkillBlock">
+            <End Role="SkillBlock" EntitySet="SkillBlock" />
+            <End Role="Skill" EntitySet="Skill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Skill" Association="Self.FK_User_Skill">
+            <End Role="Skill" EntitySet="Skill" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="WS_SystemEntities">
+          <EntitySetMapping Name="Competition">
+            <EntityTypeMapping TypeName="Model.Competition">
+              <MappingFragment StoreEntitySet="Competition">
+                <ScalarProperty Name="idCompetition" ColumnName="idCompetition" />
+                <ScalarProperty Name="titleCompetition" ColumnName="titleCompetition" />
+                <ScalarProperty Name="startDateCompetition" ColumnName="startDateCompetition" />
+                <ScalarProperty Name="endDateCompetition" ColumnName="endDateCompetition" />
+                <ScalarProperty Name="cityCompetition" ColumnName="cityCompetition" />
+                <ScalarProperty Name="regionCode" ColumnName="regionCode" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="descriptionCompetition" ColumnName="descriptionCompetition" />
+                <ScalarProperty Name="photoPathCompetition" ColumnName="photoPathCompetition" />
+                <ScalarProperty Name="logoPathCompetition" ColumnName="logoPathCompetition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Region">
+            <EntityTypeMapping TypeName="Model.Region">
+              <MappingFragment StoreEntitySet="Region">
+                <ScalarProperty Name="codeRegion" ColumnName="codeRegion" />
+                <ScalarProperty Name="nameRegion" ColumnName="nameRegion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="Model.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="idRole" ColumnName="idRole" />
+                <ScalarProperty Name="nameRole" ColumnName="nameRole" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Skill">
+            <EntityTypeMapping TypeName="Model.Skill">
+              <MappingFragment StoreEntitySet="Skill">
+                <ScalarProperty Name="idSkill" ColumnName="idSkill" />
+                <ScalarProperty Name="nameSkill" ColumnName="nameSkill" />
+                <ScalarProperty Name="isFutureSkill" ColumnName="isFutureSkill" />
+                <ScalarProperty Name="skillBlockId" ColumnName="skillBlockId" />
+                <ScalarProperty Name="NumberCompetitorSkill" ColumnName="NumberCompetitorSkill" />
+                <ScalarProperty Name="NumberExpertSkill" ColumnName="NumberExpertSkill" />
+                <ScalarProperty Name="WorkPlaceArea" ColumnName="WorkPlaceArea" />
+                <ScalarProperty Name="StoreArea" ColumnName="StoreArea" />
+                <ScalarProperty Name="MarkRoomArea" ColumnName="MarkRoomArea" />
+                <ScalarProperty Name="BriffingRoomArea" ColumnName="BriffingRoomArea" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SkillBlock">
+            <EntityTypeMapping TypeName="Model.SkillBlock">
+              <MappingFragment StoreEntitySet="SkillBlock">
+                <ScalarProperty Name="idSkillBlock" ColumnName="idSkillBlock" />
+                <ScalarProperty Name="nameSkillBlock" ColumnName="nameSkillBlock" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="Model.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+                <ScalarProperty Name="FirstNameUser" ColumnName="FirstNameUser" />
+                <ScalarProperty Name="LastNameUser" ColumnName="LastNameUser" />
+                <ScalarProperty Name="PatronymicUser" ColumnName="PatronymicUser" />
+                <ScalarProperty Name="PINUser" ColumnName="PINUser" />
+                <ScalarProperty Name="PasswordUser" ColumnName="PasswordUser" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="phoneNumberUser" ColumnName="phoneNumberUser" />
+                <ScalarProperty Name="emailUser" ColumnName="emailUser" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="regionCode" ColumnName="regionCode" />
+                <ScalarProperty Name="competitionUser" ColumnName="competitionUser" />
+                <ScalarProperty Name="placeUser" ColumnName="placeUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
